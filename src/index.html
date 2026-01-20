@@ -19,24 +19,9 @@
                     <li><button class="nav-btn" data-page="equipment">装备道具</button></li>
                     <li><button class="nav-btn" data-page="dice">骰子工具</button></li>
                     <li><button class="nav-btn" data-page="guide">车卡指南</button></li>
-                    <li><button class="nav-btn" id="showAuthorInfo">作者信息</button></li>
+                    <li><button class="nav-btn" data-page="journal">冒险杂记</button></li>
                 </ul>
             </nav>
-        
-        <!-- 作者信息弹窗 -->
-        <div class="modal" id="authorInfoModal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <div class="author-info">
-                    <p>中文翻译来自 <a href="https://www.goddessfantasy.net/bbs/index.php?topic=123724.0" target="_blank">女神幻想论坛</a></p>
-                    <p>原作来自 <a href="https://morkborg.com/" target="_blank">MÖRK BORG 官方网站</a></p>
-                    <p>工具作者是 不咕鸟（基德）使用google antigravity</p>
-                    <p>欢迎加入成都本地线下面团企业群，寻找你的冒险伙伴！</p>
-                    <p>QQ群: 691707475</p>
-                    <p class="disclaimer">本工具仅供个人及亲友团快速建卡与跑团交流使用，严禁用于任何商业用途。</p>
-                </div>
-            </div>
-        </div>
         
         
         
@@ -467,6 +452,21 @@
                     </div>
                     <div class="dice-result">
                         <span id="diceResult">点击按钮掷骰子</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 冒险杂记页面 -->
+            <div class="page" id="journalPage">
+                <div class="character-card">
+                    <h2>📜 冒险杂记 | ADVENTURE JOURNAL</h2>
+                    
+                    <div class="card-section">
+                        <button id="addJournalEntry" class="add-journal-btn">+ 添加新记录</button>
+                        
+                        <div id="journalEntries" class="journal-entries">
+                            <!-- 冒险记录将通过JavaScript动态添加 -->
+                        </div>
                     </div>
                 </div>
             </div>

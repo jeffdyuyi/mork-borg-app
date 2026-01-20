@@ -844,6 +844,442 @@ body.light .author-info .disclaimer {
   border-top: 1px solid #d0c0c0;
 }
 
+/* 作者信息弹窗样式 */
+.author-modal {
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.8);
+  backdrop-filter: blur(5px);
+  animation: modalFadeIn 0.5s ease-out;
+}
+
+.author-modal .modal-content {
+  background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+  margin: 15% auto;
+  padding: 2rem;
+  border: 3px solid #d4af37;
+  border-radius: 8px;
+  width: 80%;
+  max-width: 600px;
+  box-shadow: 0 0 50px rgba(212, 175, 55, 0.5);
+  position: relative;
+  text-align: center;
+}
+
+.author-modal .modal-content h2 {
+  border-left: none;
+  padding-left: 0;
+  margin-bottom: 1.5rem;
+}
+
+.author-modal .close-btn {
+  margin-top: 1.5rem;
+  background: linear-gradient(145deg, #2d0000, #1a0000);
+  color: #fff;
+  border: 2px solid #d4af37;
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.author-modal .close-btn:hover {
+  background: linear-gradient(145deg, #700000, #400000);
+  border-color: #fff;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 25px rgba(212, 175, 55, 0.4);
+}
+
+/* 浅色主题下的作者信息弹窗样式 */
+body.light .author-modal {
+  background-color: rgba(255,255,255,0.8);
+}
+
+body.light .author-modal .modal-content {
+  background: linear-gradient(145deg, #ffffff, #f0f0f0);
+  border: 3px solid #8b5a2b;
+  box-shadow: 0 0 50px rgba(139, 90, 43, 0.5);
+}
+
+body.light .author-modal .modal-content h2 {
+  color: #8b5a2b;
+}
+
+body.light .author-modal .close-btn {
+  background: linear-gradient(145deg, #f0f0f0, #e0e0e0);
+  color: #333;
+  border: 2px solid #8b5a2b;
+  box-shadow: 0 4px 15px rgba(139, 90, 43, 0.2);
+}
+
+body.light .author-modal .close-btn:hover {
+  background: linear-gradient(145deg, #e0e0e0, #d0d0d0);
+  border-color: #333;
+  box-shadow: 0 6px 25px rgba(139, 90, 43, 0.4);
+}
+
+/* 冒险杂记样式 */
+.add-journal-btn {
+  background: linear-gradient(145deg, #2d0000, #1a0000);
+  color: #fff;
+  border: 2px solid #d4af37;
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+}
+
+.add-journal-btn:hover {
+  background: linear-gradient(145deg, #700000, #400000);
+  border-color: #fff;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 25px rgba(212, 175, 55, 0.4);
+}
+
+.journal-entries {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.journal-entry {
+  background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+  border: 2px solid #442222;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  transition: all 0.3s ease;
+}
+
+.journal-entry:hover {
+  border-color: #d4af37;
+  box-shadow: 0 6px 25px rgba(212, 175, 55, 0.2);
+}
+
+.journal-entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #442222;
+}
+
+.journal-entry-header h3 {
+  color: #d4af37;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.delete-journal-btn {
+  background: #331111;
+  border: 2px solid #ff5555;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  min-width: auto;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.delete-journal-btn:hover {
+  background: #551111;
+  border-color: #ff2222;
+  transform: translateY(-2px);
+}
+
+.journal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  color: #c0c0c0;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: bold;
+}
+
+.form-group input[type="date"] {
+  background: #1a1a1a;
+  border: 1px solid #442222;
+  padding: 0.8rem;
+  border-radius: 4px;
+  color: #e0e0e0;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.3s ease;
+}
+
+.form-group input[type="date"]:focus {
+  outline: none;
+  border-color: #d4af37;
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+}
+
+.form-group select {
+  background: #1a1a1a;
+  border: 1px solid #442222;
+  padding: 0.8rem;
+  border-radius: 4px;
+  color: #e0e0e0;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  margin-bottom: 0.5rem;
+}
+
+.form-group select:focus {
+  outline: none;
+  border-color: #d4af37;
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+}
+
+.form-group input[type="text"] {
+  background: #1a1a1a;
+  border: 1px solid #442222;
+  padding: 0.8rem;
+  border-radius: 4px;
+  color: #e0e0e0;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.3s ease;
+}
+
+.form-group input[type="text"]:focus {
+  outline: none;
+  border-color: #d4af37;
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+}
+
+.form-group textarea {
+  background: #1a1a1a;
+  border: 1px solid #442222;
+  padding: 1rem;
+  border-radius: 4px;
+  color: #e0e0e0;
+  font-size: 1rem;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 100px;
+  transition: all 0.3s ease;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.form-group textarea:focus {
+  outline: none;
+  border-color: #d4af37;
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+}
+
+.save-journal-btn {
+  background: linear-gradient(145deg, #2d0000, #1a0000);
+  color: #fff;
+  border: 2px solid #d4af37;
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+  align-self: flex-start;
+}
+
+.save-journal-btn:hover {
+  background: linear-gradient(145deg, #700000, #400000);
+  border-color: #fff;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 25px rgba(212, 175, 55, 0.4);
+}
+
+/* 浅色主题下的冒险杂记样式 */
+body.light .add-journal-btn {
+  background: linear-gradient(145deg, #f0f0f0, #e0e0e0);
+  color: #333;
+  border: 2px solid #8b5a2b;
+  box-shadow: 0 4px 15px rgba(139, 90, 43, 0.2);
+}
+
+body.light .add-journal-btn:hover {
+  background: linear-gradient(145deg, #e0e0e0, #d0d0d0);
+  border-color: #333;
+  box-shadow: 0 6px 25px rgba(139, 90, 43, 0.4);
+}
+
+body.light .journal-entry {
+  background: linear-gradient(145deg, #ffffff, #f0f0f0);
+  border: 2px solid #e0e0e0;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+body.light .journal-entry:hover {
+  border-color: #8b5a2b;
+  box-shadow: 0 6px 25px rgba(139, 90, 43, 0.2);
+}
+
+body.light .journal-entry-header {
+  border-bottom: 2px solid #e0e0e0;
+}
+
+body.light .journal-entry-header h3 {
+  color: #8b5a2b;
+}
+
+body.light .delete-journal-btn {
+  background: #f0f0f0;
+  border: 2px solid #ff5555;
+  color: #333;
+}
+
+body.light .delete-journal-btn:hover {
+  background: #e0e0e0;
+  border-color: #ff2222;
+}
+
+body.light .form-group label {
+  color: #666;
+}
+
+body.light .form-group input[type="date"] {
+  background: #f8f8f8;
+  border: 1px solid #e0e0e0;
+  color: #333;
+}
+
+body.light .form-group input[type="date"]:focus {
+  border-color: #8b5a2b;
+  box-shadow: 0 0 10px rgba(139, 90, 43, 0.3);
+}
+
+body.light .form-group select {
+  background: #f8f8f8;
+  border: 1px solid #e0e0e0;
+  color: #333;
+}
+
+body.light .form-group select:focus {
+  border-color: #8b5a2b;
+  box-shadow: 0 0 10px rgba(139, 90, 43, 0.3);
+}
+
+body.light .form-group input[type="text"] {
+  background: #f8f8f8;
+  border: 1px solid #e0e0e0;
+  color: #333;
+}
+
+body.light .form-group input[type="text"]:focus {
+  border-color: #8b5a2b;
+  box-shadow: 0 0 10px rgba(139, 90, 43, 0.3);
+}
+
+body.light .form-group textarea {
+  background: #f8f8f8;
+  border: 1px solid #e0e0e0;
+  color: #333;
+}
+
+body.light .form-group textarea:focus {
+  border-color: #8b5a2b;
+  box-shadow: 0 0 10px rgba(139, 90, 43, 0.3);
+}
+
+body.light .save-journal-btn {
+  background: linear-gradient(145deg, #f0f0f0, #e0e0e0);
+  color: #333;
+  border: 2px solid #8b5a2b;
+  box-shadow: 0 4px 15px rgba(139, 90, 43, 0.2);
+}
+
+body.light .save-journal-btn:hover {
+  background: linear-gradient(145deg, #e0e0e0, #d0d0d0);
+  border-color: #333;
+  box-shadow: 0 6px 25px rgba(139, 90, 43, 0.4);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .author-modal .modal-content {
+    width: 90%;
+    margin: 20% auto;
+    padding: 1.5rem;
+  }
+  
+  .journal-entry-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .delete-journal-btn {
+    align-self: flex-end;
+  }
+  
+  .save-journal-btn {
+    align-self: stretch;
+  }
+}
+
+@media (max-width: 480px) {
+  .author-modal .modal-content {
+    width: 95%;
+    margin: 30% auto;
+    padding: 1rem;
+  }
+  
+  .add-journal-btn {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+  }
+  
+  .journal-entry {
+    padding: 1rem;
+  }
+  
+  .form-group input[type="date"],
+  .form-group select,
+  .form-group input[type="text"],
+  .form-group textarea {
+    padding: 0.6rem;
+    font-size: 0.9rem;
+  }
+  
+  .save-journal-btn {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+  }
+}
+
 body.light h1 {
   color: #8b5a2b;
   text-shadow: 0 0 20px rgba(139, 90, 43, 0.3), 0 0 40px rgba(139, 90, 43, 0.1);

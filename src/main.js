@@ -44,21 +44,8 @@ function setupEventListeners() {
   navBtns.forEach(btn => {
     btn.addEventListener('click', function() {
       const page = this.getAttribute('data-page');
-      if (this.id === 'showAuthorInfo') {
-        showAuthorInfoModal();
-      } else {
-        showPage(page);
-      }
+      showPage(page);
     });
-  });
-  document.querySelector('.close').addEventListener('click', hideAuthorInfoModal);
-  
-  // 点击弹窗外部关闭弹窗
-  window.addEventListener('click', function(event) {
-    const modal = document.getElementById('authorInfoModal');
-    if (event.target === modal) {
-      hideAuthorInfoModal();
-    }
   });
   
   // 将骰子函数暴露到全局
@@ -204,7 +191,6 @@ function toggleEditMode() {
 function makeEditable() {
   const editableElements = [
     { id: 'charName', type: 'text' },
-    { id: 'charClass', type: 'text' },
     { id: 'charBg', type: 'textarea' },
     { id: 'charHp', type: 'text' },
     { id: 'charOmen', type: 'text' },
@@ -232,12 +218,52 @@ function makeEditable() {
       element.appendChild(input);
     }
   });
+  
+  // 为职业添加下拉菜单
+  const charClassElement = document.getElementById('charClass');
+  if (charClassElement) {
+    const currentClass = charClassElement.textContent;
+    const select = document.createElement('select');
+    select.className = 'editable';
+    
+    // 添加职业选项
+    const classes = ["尖牙逃兵", "阴沟恶棍", "神秘隐士", "落魄王室", "异端祭司", "密教药师"];
+    classes.forEach(cls => {
+      const option = document.createElement('option');
+      option.value = cls;
+      option.textContent = cls;
+      if (cls === currentClass) {
+        option.selected = true;
+      }
+      select.appendChild(option);
+    });
+    
+    // 添加重新生成按钮
+    const regenerateBtn = document.createElement('button');
+    regenerateBtn.textContent = '重新生成';
+    regenerateBtn.className = 'regenerate-btn';
+    regenerateBtn.style.marginLeft = '10px';
+    regenerateBtn.style.padding = '5px 10px';
+    regenerateBtn.style.fontSize = '0.8rem';
+    regenerateBtn.style.background = 'linear-gradient(145deg, #2d0000, #1a0000)';
+    regenerateBtn.style.color = '#fff';
+    regenerateBtn.style.border = '1px solid #d4af37';
+    regenerateBtn.style.borderRadius = '4px';
+    regenerateBtn.style.cursor = 'pointer';
+    regenerateBtn.addEventListener('click', function() {
+      regenerateCharacterByClass(select.value);
+    });
+    
+    charClassElement.innerHTML = '';
+    charClassElement.appendChild(select);
+    charClassElement.appendChild(regenerateBtn);
+  }
 }
 
 // 保存编辑
 function saveEdits() {
   const editableElements = [
-    'charName', 'charClass', 'charBg', 'charHp', 'charOmen',
+    'charName', 'charBg', 'charHp', 'charOmen',
     'basicSilver', 'basicFood', 'charContainer', 'charSupply1', 
     'charSupply2', 'scrollEffect', 'charUnique'
   ];
@@ -249,6 +275,13 @@ function saveEdits() {
       element.textContent = input.value;
     }
   });
+  
+  // 保存职业选择
+  const charClassElement = document.getElementById('charClass');
+  const classSelect = charClassElement.querySelector('select');
+  if (classSelect) {
+    charClassElement.textContent = classSelect.value;
+  }
   
   alert('编辑已保存！');
 }
@@ -343,6 +376,125 @@ window.deleteCharacter = function(id) {
   }
 };
 
+// 根据职业重新生成角色
+function regenerateCharacterByClass(className) {
+  // 导入必要的工具函数和数据
+  import('./utils/character.js').then(({ generateCharacter }) => {
+    import('./data/gameData.js').then(({ CLASSES, WEAPONS_FULL, WEAPONS_SCROLL, ARMORS_FULL, ARMORS_SCROLL, CONTAINERS, SUPPLY1, SUPPLY2, UNHOLY_SCROLLS, HOLY_SCROLLS }) => {
+      import('./utils/dice.js').then(({ rollD4, rollD6, rollD8, rollD10, rollD12, roll2d6, roll3d6, getModifier }) => {
+        // 找到选择的职业
+        const selectedClass = CLASSES.find(cls => cls.name === className);
+        if (!selectedClass) return;
+        
+        // 是否持有卷轴
+        const hasScroll = Math.random() > 0.5;
+        let scrollType = "无";
+        let scrollEffect = "无法术效果";
+        
+        if (hasScroll) {
+          scrollType = Math.random() > 0.5 ? "【不洁卷轴】" : "【神圣卷轴】";
+          scrollEffect = scrollType.includes("不洁") 
+            ? UNHOLY_SCROLLS[rollD10() - 1] 
+            : HOLY_SCROLLS[rollD10() - 1];
+        }
+        
+        // 根据是否持有卷轴筛选武器/护甲池
+        const weaponPool = hasScroll ? WEAPONS_SCROLL : WEAPONS_FULL;
+        const armorPool = hasScroll ? ARMORS_SCROLL : ARMORS_FULL;
+        const randomWeapon = weaponPool[Math.floor(Math.random() * weaponPool.length)];
+        const randomArmor = armorPool[Math.floor(Math.random() * armorPool.length)];
+        
+        // 生成属性
+        let agi = roll3d6();
+        let prs = roll3d6();
+        let str = roll3d6();
+        let tgh = roll3d6();
+        
+        // 根据职业调整属性
+        if (className === "尖牙逃兵") {
+          str = roll3d6() + 2; // 强壮骰 3d6+2
+          agi = roll3d6() - 1; // 灵巧骰 3d6-1
+        } else if (className === "阴沟恶棍") {
+          str = roll3d6() - 2; // 强壮骰 3d6-2
+        } else if (className === "神秘隐士") {
+          prs = roll3d6() + 2; // 表现骰 3d6+2
+          str = roll3d6() - 2; // 强壮骰 3d6-2
+        } else if (className === "异端祭司") {
+          prs = roll3d6() + 2; // 表现骰 3d6+2
+          str = roll3d6() - 2; // 强壮骰 3d6-2
+        } else if (className === "密教药师") {
+          tgh = roll3d6() + 2; // 体质骰 3d6+2
+          str = roll3d6() - 2; // 强壮骰 3d6-2
+        }
+        
+        const agiMod = getModifier(agi);
+        const prsMod = getModifier(prs);
+        const strMod = getModifier(str);
+        const tghMod = getModifier(tgh);
+        
+        // 初始物资
+        const basicSilver = roll2d6() * 10;
+        const basicFood = rollD4();
+        const randomContainer = CONTAINERS[rollD6() - 1];
+        const randomSupply1 = SUPPLY1[rollD12() - 1];
+        const randomSupply2 = SUPPLY2[rollD12() - 1];
+        
+        // HP和预兆
+        let hp = tghMod + rollD8();
+        hp = hp < 1 ? 1 : hp;
+        const omen = rollD4();
+        
+        // 随机背景和独特能力
+        const randomBg = selectedClass.bg[Math.floor(Math.random() * selectedClass.bg.length)];
+        const randomUnique = selectedClass.unique[Math.floor(Math.random() * selectedClass.unique.length)];
+        
+        const scrollStatusText = hasScroll 
+          ? "【当前状态】：持有法术卷轴 → 武器池强制=d6 | 护甲池强制=d2 | 双手武器/中甲/重甲将使法术失效！"
+          : "【当前状态】：未持有法术卷轴 → 武器池=d10 | 护甲池=d4";
+        
+        // 更新当前角色
+        currentCharacter = {
+          ...currentCharacter,
+          class: selectedClass.name,
+          bg: randomBg,
+          agi: agi,
+          agiMod: agiMod,
+          prs: prs,
+          prsMod: prsMod,
+          str: str,
+          strMod: strMod,
+          tgh: tgh,
+          tghMod: tghMod,
+          hp: hp,
+          omen: omen,
+          weapon: randomWeapon,
+          armor: randomArmor,
+          silver: basicSilver,
+          food: basicFood,
+          container: randomContainer,
+          supply1: randomSupply1,
+          supply2: randomSupply2,
+          scrollType: scrollType,
+          scrollEffect: scrollEffect,
+          unique: randomUnique,
+          trait: selectedClass.trait,
+          attrRule: selectedClass.attrRule,
+          scrollStatus: scrollStatusText,
+          hasScroll: hasScroll
+        };
+        
+        // 显示更新后的角色
+        displayCharacter(currentCharacter);
+        
+        // 重新进入编辑模式
+        makeEditable();
+        
+        alert('角色已根据新职业重新生成！');
+      });
+    });
+  });
+}
+
 // 切换物品价值速查手册
 function toggleGuide() {
   const content = document.getElementById('guideContent');
@@ -369,15 +521,235 @@ function checkForSharedCharacter() {
 
 // 显示作者信息弹窗
 function showAuthorInfoModal() {
-  const modal = document.getElementById('authorInfoModal');
-  modal.style.display = 'block';
+  const modal = document.createElement('div');
+  modal.className = 'author-modal';
+  modal.innerHTML = `
+    <div class="modal-content">
+      <h2>作者信息</h2>
+      <p>感谢使用 MÖRK BORG 角色创建工具！</p>
+      <p>此工具基于 MÖRK BORG 桌面角色扮演游戏规则制作，旨在帮助玩家快速生成角色。</p>
+      <p>版本：1.0.0</p>
+      <button id="closeModal" class="close-btn">关闭</button>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  
+  // 添加关闭按钮事件
+  document.getElementById('closeModal').addEventListener('click', function() {
+    modal.remove();
+  });
 }
 
-// 隐藏作者信息弹窗
-function hideAuthorInfoModal() {
-  const modal = document.getElementById('authorInfoModal');
-  modal.style.display = 'none';
+// 初始化冒险杂记功能
+function initJournal() {
+  const addBtn = document.getElementById('addJournalEntry');
+  if (addBtn) {
+    addBtn.addEventListener('click', addJournalEntry);
+  }
+  
+  // 加载保存的冒险记录
+  loadJournalEntries();
+}
+
+// 添加新的冒险记录
+function addJournalEntry() {
+  const entriesContainer = document.getElementById('journalEntries');
+  const entryId = Date.now();
+  
+  const entry = document.createElement('div');
+  entry.className = 'journal-entry';
+  entry.dataset.id = entryId;
+  
+  // 获取保存的角色列表
+  const savedChars = storage.getCharacters();
+  const charOptions = savedChars.map(char => `
+    <option value="${char.name}">${char.name} (${char.class})</option>
+  `).join('');
+  
+  entry.innerHTML = `
+    <div class="journal-entry-header">
+      <h3>冒险记录 #${entryId}</h3>
+      <button class="delete-journal-btn">删除</button>
+    </div>
+    <div class="journal-form">
+      <div class="form-group">
+        <label>日期：</label>
+        <input type="date" class="journal-date" value="${new Date().toISOString().split('T')[0]}">
+      </div>
+      <div class="form-group">
+        <label>角色名：</label>
+        <select class="journal-character">
+          <option value="">手动输入</option>
+          ${charOptions}
+        </select>
+        <input type="text" class="journal-character-manual" placeholder="请输入角色名">
+      </div>
+      <div class="form-group">
+        <label>冒险故事：</label>
+        <textarea class="journal-story" rows="4" placeholder="记录本次冒险的详细内容..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>人名与线索：</label>
+        <textarea class="journal-clues" rows="2" placeholder="记录遇到的NPC和重要线索..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>战利品速记：</label>
+        <textarea class="journal-loot" rows="2" placeholder="记录获得的战利品..."></textarea>
+      </div>
+      <button class="save-journal-btn">保存记录</button>
+    </div>
+  `;
+  
+  entriesContainer.appendChild(entry);
+  
+  // 添加删除按钮事件
+  const deleteBtn = entry.querySelector('.delete-journal-btn');
+  deleteBtn.addEventListener('click', function() {
+    if (confirm('确定要删除这条记录吗？')) {
+      entry.remove();
+      saveJournalEntries();
+    }
+  });
+  
+  // 添加保存按钮事件
+  const saveBtn = entry.querySelector('.save-journal-btn');
+  saveBtn.addEventListener('click', function() {
+    saveJournalEntries();
+    alert('记录已保存！');
+  });
+  
+  // 角色选择事件
+  const charSelect = entry.querySelector('.journal-character');
+  const charManual = entry.querySelector('.journal-character-manual');
+  
+  charSelect.addEventListener('change', function() {
+    charManual.value = '';
+  });
+  
+  charManual.addEventListener('input', function() {
+    charSelect.value = '';
+  });
+}
+
+// 保存冒险记录到localStorage
+function saveJournalEntries() {
+  const entries = [];
+  const entryElements = document.querySelectorAll('.journal-entry');
+  
+  entryElements.forEach(entry => {
+    const id = entry.dataset.id;
+    const date = entry.querySelector('.journal-date').value;
+    const charSelect = entry.querySelector('.journal-character').value;
+    const charManual = entry.querySelector('.journal-character-manual').value;
+    const character = charSelect || charManual;
+    const story = entry.querySelector('.journal-story').value;
+    const clues = entry.querySelector('.journal-clues').value;
+    const loot = entry.querySelector('.journal-loot').value;
+    
+    entries.push({
+      id,
+      date,
+      character,
+      story,
+      clues,
+      loot
+    });
+  });
+  
+  localStorage.setItem('journalEntries', JSON.stringify(entries));
+}
+
+// 从localStorage加载冒险记录
+function loadJournalEntries() {
+  const savedEntries = localStorage.getItem('journalEntries');
+  if (savedEntries) {
+    try {
+      const entries = JSON.parse(savedEntries);
+      const entriesContainer = document.getElementById('journalEntries');
+      
+      entries.forEach(entryData => {
+        const entry = document.createElement('div');
+        entry.className = 'journal-entry';
+        entry.dataset.id = entryData.id;
+        
+        // 获取保存的角色列表
+        const savedChars = storage.getCharacters();
+        const charOptions = savedChars.map(char => `
+          <option value="${char.name}" ${char.name === entryData.character ? 'selected' : ''}>${char.name} (${char.class})</option>
+        `).join('');
+        
+        entry.innerHTML = `
+          <div class="journal-entry-header">
+            <h3>冒险记录 #${entryData.id}</h3>
+            <button class="delete-journal-btn">删除</button>
+          </div>
+          <div class="journal-form">
+            <div class="form-group">
+              <label>日期：</label>
+              <input type="date" class="journal-date" value="${entryData.date}">
+            </div>
+            <div class="form-group">
+              <label>角色名：</label>
+              <select class="journal-character">
+                <option value="" ${!savedChars.some(char => char.name === entryData.character) ? 'selected' : ''}>手动输入</option>
+                ${charOptions}
+              </select>
+              <input type="text" class="journal-character-manual" placeholder="请输入角色名" value="${!savedChars.some(char => char.name === entryData.character) ? entryData.character : ''}">
+            </div>
+            <div class="form-group">
+              <label>冒险故事：</label>
+              <textarea class="journal-story" rows="4" placeholder="记录本次冒险的详细内容...">${entryData.story}</textarea>
+            </div>
+            <div class="form-group">
+              <label>人名与线索：</label>
+              <textarea class="journal-clues" rows="2" placeholder="记录遇到的NPC和重要线索...">${entryData.clues}</textarea>
+            </div>
+            <div class="form-group">
+              <label>战利品速记：</label>
+              <textarea class="journal-loot" rows="2" placeholder="记录获得的战利品...">${entryData.loot}</textarea>
+            </div>
+            <button class="save-journal-btn">保存记录</button>
+          </div>
+        `;
+        
+        entriesContainer.appendChild(entry);
+        
+        // 添加删除按钮事件
+        const deleteBtn = entry.querySelector('.delete-journal-btn');
+        deleteBtn.addEventListener('click', function() {
+          if (confirm('确定要删除这条记录吗？')) {
+            entry.remove();
+            saveJournalEntries();
+          }
+        });
+        
+        // 添加保存按钮事件
+        const saveBtn = entry.querySelector('.save-journal-btn');
+        saveBtn.addEventListener('click', function() {
+          saveJournalEntries();
+          alert('记录已保存！');
+        });
+        
+        // 角色选择事件
+        const charSelect = entry.querySelector('.journal-character');
+        const charManual = entry.querySelector('.journal-character-manual');
+        
+        charSelect.addEventListener('change', function() {
+          charManual.value = '';
+        });
+        
+        charManual.addEventListener('input', function() {
+          charSelect.value = '';
+        });
+      });
+    } catch (error) {
+      console.error('加载冒险记录失败:', error);
+    }
+  }
 }
 
 // 页面加载完成后初始化
-document.addEventListener('DOMContentLoaded', initApp);
+document.addEventListener('DOMContentLoaded', function() {
+  initApp();
+  initJournal();
+});

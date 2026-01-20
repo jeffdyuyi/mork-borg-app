@@ -15,6 +15,13 @@ function initApp() {
   checkForSharedCharacter();
   initNavigation();
   handleResetCharacter();
+  
+  // 检查是否首次进入，显示作者信息弹窗
+  const hasSeenAuthorInfo = localStorage.getItem('hasSeenAuthorInfo');
+  if (!hasSeenAuthorInfo) {
+    showAuthorInfoModal();
+    localStorage.setItem('hasSeenAuthorInfo', 'true');
+  }
 }
 
 // 初始化导航
@@ -100,7 +107,7 @@ function toggleTheme() {
   const isLight = body.classList.toggle('light');
   
   // 更新按钮文本
-  btn.textContent = isLight ? '切换主题 🌞' : '切换主题 🌙';
+  btn.textContent = isLight ? '🌞' : '🌙';
   
   // 保存主题偏好到localStorage
   localStorage.setItem('theme', isLight ? 'light' : 'dark');
@@ -111,7 +118,7 @@ function loadThemePreference() {
   const savedTheme = localStorage.getItem('theme');
   if (savedTheme === 'light') {
     document.body.classList.add('light');
-    document.getElementById('themeToggle').textContent = '切换主题 🌞';
+    document.getElementById('themeToggle').textContent = '🌞';
   }
 }
 

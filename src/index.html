@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>MÖRK BORG ⚫ 黑暗堡垒 | 角色创建工具【补全所有规则+物品价值速查】</title>
+    <link rel="stylesheet" href="./styles/main.css">
+</head>
+<body>
+    <div class="container">
+        <h1>MÖRK BORG ⚫ 黑暗堡垒</h1>
+        <div class="subtitle">角色快速创建工具 | 官方规则全补全 | 法术卷轴完整规则 | 物品价值速查 | 无删减完整版</div>
+        
+        <div class="btn-group">
+            <button id="generateChar">生成随机角色 ⚫</button>
+            <button id="editChar">编辑角色 ✏️</button>
+            <button id="saveChar">保存角色 💾</button>
+            <button id="exportChar">导出角色 📤</button>
+            <button id="resetChar">重置清空角色 🗑️</button>
+        </div>
+
+        <!-- 骰子模拟器 -->
+        <div class="dice-roller">
+            <h2>🎲 骰子模拟器 | DICE ROLLER</h2>
+            <div class="dice-buttons">
+                <button class="dice-btn" onclick="window.rollDice('d2')">D2</button>
+                <button class="dice-btn" onclick="window.rollDice('d4')">D4</button>
+                <button class="dice-btn" onclick="window.rollDice('d6')">D6</button>
+                <button class="dice-btn" onclick="window.rollDice('d8')">D8</button>
+                <button class="dice-btn" onclick="window.rollDice('d10')">D10</button>
+                <button class="dice-btn" onclick="window.rollDice('d12')">D12</button>
+                <button class="dice-btn" onclick="window.rollDice('d20')">D20</button>
+                <button class="dice-btn" onclick="window.rollDice('3d6')">3D6</button>
+                <button class="dice-btn" onclick="window.rollDice('2d6')">2D6</button>
+            </div>
+            <div class="dice-result">
+                <span id="diceResult">点击按钮掷骰子</span>
+            </div>
+        </div>
+
+        <!-- 角色保存/加载 -->
+        <div class="save-load-section">
+            <h2>💾 角色管理 | CHARACTER MANAGEMENT</h2>
+            <div class="saved-characters" id="savedCharacters">
+                <p style="text-align: center; color: #888;">暂无保存的角色</p>
+            </div>
+        </div>
+
+        <div class="page-container">
+            <!-- PAGE 1: CHARACTER SHEET -->
+            <div class="character-sheet page">
+                <div class="character-card" id="charCard">
+                    <div class="card-section header-section">
+                        <div class="char-name-container">
+                            <span class="char-name-label">角色名</span>
+                            <span id="charName" class="char-name-value"></span>
+                        </div>
+                        <div class="class-container">
+                            <span class="class-label">职业</span>
+                            <span id="charClass" class="class-value"></span>
+                        </div>
+                    </div>
+
+                    <div class="card-section stats-section">
+                        <div class="stat-grid">
+                            <div class="stat-item">
+                                <div class="stat-label">灵巧</div>
+                                <div class="stat-value" id="agi">+0</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">表现</div>
+                                <div class="stat-value" id="prs">+0</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">强壮</div>
+                                <div class="stat-value" id="str">+0</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">体质</div>
+                                <div class="stat-value" id="tgh">+0</div>
+                            </div>
+                        </div>
+                        <div class="hp-omen-grid">
+                            <div class="hp-box">
+                                <div class="hp-label">HP</div>
+                                <div class="hp-value" id="charHp">0</div>
+                            </div>
+                            <div class="omen-box">
+                                <div class="omen-label">预兆</div>
+                                <div class="omen-value" id="charOmen">0</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-section equipment-section">
+                        <h2>装备</h2>
+                        <div class="equipment-grid">
+                            <div class="equipment-item">
+                                <span class="equipment-label">武器:</span>
+                                <span id="charWeapon"></span>
+                            </div>
+                            <div class="equipment-item">
+                                <span class="equipment-label">护甲:</span>
+                                <span id="charArmor"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-section inventory-section">
+                        <h2>物品栏</h2>
+                        <p><strong>银币:</strong> <span id="basicSilver">0</span> s</p>
+                        <ul id="inventoryList">
+                            <li>水袋 (4天)</li>
+                            <li><span id="basicFood"></span> 天份口粮</li>
+                            <li><span id="charContainer"></span></li>
+                            <li><span id="charSupply1"></span></li>
+                            <li><span id="charSupply2"></span></li>
+                        </ul>
+                    </div>
+
+                    <div class="card-section scroll-section">
+                        <h2>卷轴</h2>
+                        <p id="scrollType">无</p>
+                        <p id="scrollEffect"></p>
+                    </div>
+
+                    <div class="card-section abilities-section">
+                        <h2>职业能力</h2>
+                        <p id="charUnique"></p>
+                    </div>
+
+                    <div class="card-section background-section">
+                        <h2>背景</h2>
+                        <p id="charBg"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE 2: CREATION GUIDE -->
+            <div class="creation-guide">
+                <div class="character-card">
+                    <h2>🎲 创建指南 | CREATION GUIDE</h2>
+                    
+                    <div class="card-section">
+                        <h3>属性生成规则</h3>
+                        <p>掷3d6生成四项核心属性。<strong>无职业可选规则：</strong>可选择2个属性掷4d6并取最低的三个骰子之和。</p>
+                        <p><strong>属性修正值：</strong>3(-3), 4-5(-2), 6-8(-1), 9-12(0), 13-15(+1), 16-17(+2), 18(+3)。</p>
+                    </div>
+
+                    <div class="card-section">
+                        <h3>职业选择</h3>
+                        <p>你可以选择一个职业，或者作为无职业者开始。职业会给予你独特的初始物品和能力。</p>
+                    </div>
+
+                    <div class="card-section">
+                        <h3>初始资源</h3>
+                        <p><strong>银币:</strong> 2d6 × 10</p>
+                        <p><strong>食物:</strong> d4 天</p>
+                        <p><strong>生命值 (HP):</strong> 体质修正 + d8 (最低1)</p>
+                        <p><strong>预兆 (Omen):</strong> d4</p>
+                    </div>
+
+                    <div class="card-section">
+                        <h3>装备和武器</h3>
+                        <p><strong>持有卷轴:</strong> 武器池强制d6，护甲池强制d2。</p>
+                        <p><strong>无卷轴:</strong> 武器池d10，护甲池d4。</p>
+                        <p><strong>重甲惩罚：</strong>敏捷检定DR+4，防御检定DR+2。</p>
+                        <p><strong>盾牌：</strong>减1HP伤害或牺牲盾牌格挡一次攻击。</p>
+                    </div>
+
+                    <div class="card-section global-rules">
+                        <h3>通用核心规则</h3>
+                        <p><span class="dr-rule">DR检定：</span>d20±属性修正 ≥ DR 为成功。</p>
+                        <p><span class="warning">崩溃 (0 HP):</span> d4判定：1=昏迷, 2=断肢/残疾, 3=大出血, 4=死亡。</p>
+                        <p><span class="danger">死亡:</span> 负HP时直接死亡。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 物品价值速查手册 -->
+        <div class="price-guide">
+            <div class="guide-header" id="guideToggle">
+                <h2>💰 物品价值速查手册 | 所有道具银币价格 (完整收录)</h2>
+                <span style="color:#d4af37; font-size:1.5rem;">▼</span>
+            </div>
+            <div class="guide-content" id="guideContent">
+                <div class="guide-category">
+                    <h3>🗡️ 武器类 (含弹药)</h3>
+                    <div class="guide-list">
+                        <div class="guide-item">徒手 - 无价值 (d2伤害)</div>
+                        <div class="guide-item">大腿骨 - 不值钱 (d4伤害)</div>
+                        <div class="guide-item">长棍 - 5s (d4伤害)</div>
+                        <div class="guide-item">短剑 - 20s (d4伤害)</div>
+                        <div class="guide-item">短刀 - 10s (d4伤害)</div>
+                        <div class="guide-item">投石索 - 8s (d4伤害)</div>
+                        <div class="guide-item">短弓 -13s (d4伤害)</div>
+                        <div class="guide-item">手斧 -15s (d6伤害)</div>
+                        <div class="guide-item">棍棒 -10s (d6伤害)</div>
+                        <div class="guide-item">战锤 -30s (d6伤害)</div>
+                        <div class="guide-item">剑 -30s (d6伤害)</div>
+                        <div class="guide-item">弓 -25s (d6伤害)</div>
+                        <div class="guide-item">流星锤 -35s (d8伤害)</div>
+                        <div class="guide-item">弩 -40s (d8伤害)</div>
+                        <div class="guide-item">战斧 -35s (d8伤害)</div>
+                        <div class="guide-item">双手剑 -60s (d10伤害)</div>
+                        <div class="guide-item">鞭 -5s (d2伤害 束缚)</div>
+                        <div class="guide-item">20支箭 -10s | 10支弩矢 -10s</div>
+                    </div>
+                </div>
+                <div class="guide-category">
+                    <h3>🛡️ 护甲/防护类</h3>
+                    <div class="guide-list">
+                        <div class="guide-item">无护甲 - 0s (等级0)</div>
+                        <div class="guide-item">轻甲(毛皮/棉甲/皮甲) -20s (等级1，-d2伤害)</div>
+                        <div class="guide-item">中甲(鳞甲/链甲) -100s (等级2，-d4伤害)</div>
+                        <div class="guide-item">重甲(条板甲/板甲) -200s (等级3，-d6伤害)</div>
+                        <div class="guide-item">盾 -20s (-1HP伤害 / 牺牲无视一次攻击)</div>
+                    </div>
+                </div>
+                <div class="guide-category">
+                    <h3>🎒 装备/补给类 (全收录)</h3>
+                    <div class="guide-list">
+                        <div class="guide-item">背包 -6s (7件物品)</div>
+                        <div class="guide-item">包 -3s (10件物品)</div>
+                        <div class="guide-item">小车 -25s | 驴 - 无标价</div>
+                        <div class="guide-item">水带 -4s (4天水)</div>
+                        <div class="guide-item">干食物 -1s/天</div>
+                        <div class="guide-item">猪油 -5s (5顿饭)</div>
+                        <div class="guide-item">30尺绳子 -4s | 15尺铁链 -10s</div>
+                        <div class="guide-item">火把 -2s/根 | 灯油 -5s (6小时)</div>
+                        <div class="guide-item">提灯 -10s | 镁条/镁合金取火棒 -4s</div>
+                        <div class="guide-item">医药箱 -15s (4次使用，+d6HP)</div>
+                        <div class="guide-item">撬锁工具+金属片 -15s | 撬棍 -8s</div>
+                        <div class="guide-item">捕熊夹 -20s (d8伤害，DR14发现)</div>
+                        <div class="guide-item">炸弹 -无标价 (d10伤害)</div>
+                        <div class="guide-item">钩爪 -12s | 梯子 -7s | 大铁钩 -9s</div>
+                        <div class="guide-item">医药箱 -15s | 锐利的针 -3s</div>
+                        <div class="guide-item">银色十字架 -60s | 木质十字架 -8s</div>
+                        <div class="guide-item">红色毒药 -20s (3剂，DR12) | 黑色毒药 -20s (3剂，DR14)</div>
+                        <div class="guide-item">精致香水 -25s | 白垩 -1s | 口嚼烟叶 -1s</div>
+                        <div class="guide-item">毯子 -4s | 地毯 -3s | 帐篷 -12s</div>
+                        <div class="guide-item">工具箱 -20s (钉子/锤子/锯子/钳子)</div>
+                        <div class="guide-item">铁钉 -5s(10枚) | 蒺藜 -7s(d4伤害+感染)</div>
+                        <div class="guide-item">手铐 -10s | 笼嘴 -6s | 套索 -5s</div>
+                        <div class="guide-item">镜子 -15s | 剪刀 -9s | 剁肉刀 -15s</div>
+                        <div class="guide-item">防腐尸体 -66+d6 s | 盐 -4s</div>
+                    </div>
+                </div>
+                <div class="guide-category">
+                    <h3>🐾 野兽/生物类</h3>
+                    <div class="guide-list">
+                        <div class="guide-item">家养狗 -25s | 野生狗 -10s</div>
+                        <div class="guide-item">马 -80s | 骡 -10s</div>
+                        <div class="guide-item">驯化老鼠 -8s | 猴子 -无标价</div>
+                    </div>
+                </div>
+                <div class="guide-category">
+                    <h3>💴 服务/修复类</h3>
+                    <div class="guide-list">
+                        <div class="guide-item">收容所一晚 -3s | 饮品 -1s | 稳定餐食 -2s</div>
+                        <div class="guide-item">贿赂守卫 -20-40s | 贿赂文员 -30-60s | 贿赂平民 -5-15s</div>
+                        <div class="guide-item">护甲修复(1→2) -25s | 护甲修复(2→3) -40s (不可超原等级)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="./main.js"></script>
+</body>
+</html>

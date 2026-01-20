@@ -1,0 +1,30 @@
+{
+  "name": "mork-borg-character-creator",
+  "version": "1.0.0",
+  "description": "MÖRK BORG 黑暗堡垒 - 专业角色创建工具",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "echo 'No linter configured'",
+    "format": "echo 'No formatter configured'",
+    "deploy:init": "powershell -ExecutionPolicy Bypass -File -File deploy.ps1",
+    "deploy": "npm run build && git add . && git commit -m 'Deploy' && git push"
+  },
+  "keywords": [
+    "mork-borg",
+    "character-creator",
+    "rpg",
+    "tabletop"
+  ],
+  "author": "MÖRK BORG Community",
+  "license": "MIT",
+  "devDependencies": {
+    "vite": "^5.0.0"
+  },
+  "dependencies": {
+    "html2canvas": "^1.4.1",
+    "jspdf": "^2.5.1"
+  }
+}

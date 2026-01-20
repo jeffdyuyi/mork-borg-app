@@ -6,6 +6,7 @@ export default defineConfig({
   build: {
     outDir: resolve(__dirname, 'dist'),
     emptyOutDir: true,
+    chunkSizeWarningLimit: 600,
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'src/index.html')
@@ -13,7 +14,11 @@ export default defineConfig({
       output: {
         entryFileNames: 'assets/[name].[hash].js',
         chunkFileNames: 'assets/[name].[hash].js',
-        assetFileNames: 'assets/[name].[hash].[ext]'
+        assetFileNames: 'assets/[name].[hash].[ext]',
+        manualChunks: {
+          vendor: ['jspdf', 'html2canvas'],
+          purify: ['dompurify']
+        }
       }
     }
   },

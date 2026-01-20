@@ -10,8 +10,19 @@ let isEditMode = false;
 // 初始化应用
 function initApp() {
   setupEventListeners();
+  loadThemePreference();
   loadSavedCharacters();
   checkForSharedCharacter();
+  initNavigation();
+}
+
+// 初始化导航
+function initNavigation() {
+  // 显示默认页面
+  showPage('character');
+  
+  // 隐藏角色操作按钮组
+  document.getElementById('characterActions').style.display = 'flex';
 }
 
 // 设置事件监听
@@ -21,10 +32,73 @@ function setupEventListeners() {
   document.getElementById('editChar').addEventListener('click', toggleEditMode);
   document.getElementById('saveChar').addEventListener('click', handleSaveCharacter);
   document.getElementById('exportChar').addEventListener('click', handleExportCharacter);
-  document.getElementById('guideToggle').addEventListener('click', toggleGuide);
+  document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+  
+  // 导航菜单事件监听
+  const navBtns = document.querySelectorAll('.nav-btn');
+  navBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+      const page = this.getAttribute('data-page');
+      showPage(page);
+    });
+  });
   
   // 将骰子函数暴露到全局
   window.rollDice = handleRollDice;
+}
+
+// 显示指定页面
+function showPage(pageId) {
+  // 隐藏所有页面
+  const pages = document.querySelectorAll('.page');
+  pages.forEach(page => {
+    page.classList.remove('active');
+  });
+  
+  // 显示选中的页面
+  const selectedPage = document.getElementById(pageId + 'Page');
+  if (selectedPage) {
+    selectedPage.classList.add('active');
+  }
+  
+  // 更新导航按钮状态
+  const navBtns = document.querySelectorAll('.nav-btn');
+  navBtns.forEach(btn => {
+    if (btn.getAttribute('data-page') === pageId) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+  
+  // 控制角色操作按钮组的显示
+  if (pageId === 'character') {
+    document.getElementById('characterActions').style.display = 'flex';
+  } else {
+    document.getElementById('characterActions').style.display = 'none';
+  }
+}
+
+// 切换主题
+function toggleTheme() {
+  const body = document.body;
+  const btn = document.getElementById('themeToggle');
+  const isLight = body.classList.toggle('light');
+  
+  // 更新按钮文本
+  btn.textContent = isLight ? '切换主题 🌞' : '切换主题 🌙';
+  
+  // 保存主题偏好到localStorage
+  localStorage.setItem('theme', isLight ? 'light' : 'dark');
+}
+
+// 加载保存的主题偏好
+function loadThemePreference() {
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'light') {
+    document.body.classList.add('light');
+    document.getElementById('themeToggle').textContent = '切换主题 🌞';
+  }
 }
 
 // 生成角色

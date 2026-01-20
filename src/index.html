@@ -9,9 +9,36 @@
 <body>
     <div class="container">
         <h1>MÖRK BORG ⚫ 黑暗堡垒</h1>
-        <div class="subtitle">角色快速创建工具 | 官方规则全补全 | 法术卷轴完整规则 | 物品价值速查 | 无删减完整版</div>
+        <div class="subtitle"></div>
         
-        <div class="btn-group">
+        <!-- 作者信息 -->
+        <div class="author-info">
+            <p>中文翻译来自 <a href="https://www.goddessfantasy.net/bbs/index.php?topic=123724.0" target="_blank">女神幻想论坛</a></p>
+            <p>原作来自 <a href="https://morkborg.com/" target="_blank">MÖRK BORG 官方网站</a></p>
+            <p>工具作者是 不咕鸟（基德）使用google antigravity</p>
+            <p>欢迎加入成都本地线下面团企业群，寻找你的冒险伙伴！</p>
+            <p>QQ群: 691707475</p>
+            <p class="disclaimer">本工具仅供个人及亲友团快速建卡与跑团交流使用，严禁用于任何商业用途。</p>
+        </div>
+        
+        <!-- 导航菜单 -->
+            <nav class="main-nav">
+                <ul class="nav-list">
+                    <li><button class="nav-btn active" data-page="character">生成角色</button></li>
+                    <li><button class="nav-btn" data-page="introduction">游戏介绍</button></li>
+                    <li><button class="nav-btn" data-page="equipment">装备道具</button></li>
+                    <li><button class="nav-btn" data-page="dice">骰子工具</button></li>
+                    <li><button class="nav-btn" data-page="guide">车卡指南</button></li>
+                </ul>
+            </nav>
+        
+        <!-- 主题切换按钮 -->
+        <div class="theme-toggle-container">
+            <button id="themeToggle">切换主题 🌙</button>
+        </div>
+        
+        <!-- 角色操作按钮组 -->
+        <div class="btn-group" id="characterActions">
             <button id="generateChar">生成随机角色 ⚫</button>
             <button id="editChar">编辑角色 ✏️</button>
             <button id="saveChar">保存角色 💾</button>
@@ -19,127 +46,114 @@
             <button id="resetChar">重置清空角色 🗑️</button>
         </div>
 
-        <!-- 骰子模拟器 -->
-        <div class="dice-roller">
-            <h2>🎲 骰子模拟器 | DICE ROLLER</h2>
-            <div class="dice-buttons">
-                <button class="dice-btn" onclick="window.rollDice('d2')">D2</button>
-                <button class="dice-btn" onclick="window.rollDice('d4')">D4</button>
-                <button class="dice-btn" onclick="window.rollDice('d6')">D6</button>
-                <button class="dice-btn" onclick="window.rollDice('d8')">D8</button>
-                <button class="dice-btn" onclick="window.rollDice('d10')">D10</button>
-                <button class="dice-btn" onclick="window.rollDice('d12')">D12</button>
-                <button class="dice-btn" onclick="window.rollDice('d20')">D20</button>
-                <button class="dice-btn" onclick="window.rollDice('3d6')">3D6</button>
-                <button class="dice-btn" onclick="window.rollDice('2d6')">2D6</button>
-            </div>
-            <div class="dice-result">
-                <span id="diceResult">点击按钮掷骰子</span>
-            </div>
-        </div>
+        <!-- 页面容器 -->
+        <div class="pages-container">
+            <!-- 生成角色页面 -->
+            <div class="page active" id="characterPage">
+                <!-- 角色保存/加载 -->
+                <div class="save-load-section">
+                    <h2>💾 角色管理</h2>
+                    <div class="saved-characters" id="savedCharacters">
+                        <p style="text-align: center; color: #888;">暂无保存的角色</p>
+                    </div>
+                </div>
 
-        <!-- 角色保存/加载 -->
-        <div class="save-load-section">
-            <h2>💾 角色管理 | CHARACTER MANAGEMENT</h2>
-            <div class="saved-characters" id="savedCharacters">
-                <p style="text-align: center; color: #888;">暂无保存的角色</p>
-            </div>
-        </div>
+                <div class="page-container">
+                    <!-- CHARACTER SHEET -->
+                    <div class="character-sheet">
+                        <div class="character-card" id="charCard">
+                            <div class="card-section header-section">
+                                <div class="char-name-container">
+                                    <span class="char-name-label">角色名</span>
+                                    <span id="charName" class="char-name-value"></span>
+                                </div>
+                                <div class="class-container">
+                                    <span class="class-label">职业</span>
+                                    <span id="charClass" class="class-value"></span>
+                                </div>
+                            </div>
 
-        <div class="page-container">
-            <!-- PAGE 1: CHARACTER SHEET -->
-            <div class="character-sheet page">
-                <div class="character-card" id="charCard">
-                    <div class="card-section header-section">
-                        <div class="char-name-container">
-                            <span class="char-name-label">角色名</span>
-                            <span id="charName" class="char-name-value"></span>
+                            <div class="card-section stats-section">
+                                <div class="stat-grid">
+                                    <div class="stat-item">
+                                        <div class="stat-label">灵巧</div>
+                                        <div class="stat-value" id="agi">+0</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-label">表现</div>
+                                        <div class="stat-value" id="prs">+0</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-label">强壮</div>
+                                        <div class="stat-value" id="str">+0</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-label">体质</div>
+                                        <div class="stat-value" id="tgh">+0</div>
+                                    </div>
+                                </div>
+                                <div class="hp-omen-grid">
+                                    <div class="hp-box">
+                                        <div class="hp-label">HP</div>
+                                        <div class="hp-value" id="charHp">0</div>
+                                    </div>
+                                    <div class="omen-box">
+                                        <div class="omen-label">预兆</div>
+                                        <div class="omen-value" id="charOmen">0</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-section equipment-section">
+                                <h2>装备</h2>
+                                <div class="equipment-grid">
+                                    <div class="equipment-item">
+                                        <span class="equipment-label">武器:</span>
+                                        <span id="charWeapon"></span>
+                                    </div>
+                                    <div class="equipment-item">
+                                        <span class="equipment-label">护甲:</span>
+                                        <span id="charArmor"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-section inventory-section">
+                                <h2>物品栏</h2>
+                                <p><strong>银币:</strong> <span id="basicSilver">0</span> s</p>
+                                <ul id="inventoryList">
+                                    <li>水袋 (4天)</li>
+                                    <li><span id="basicFood"></span> 天份口粮</li>
+                                    <li><span id="charContainer"></span></li>
+                                    <li><span id="charSupply1"></span></li>
+                                    <li><span id="charSupply2"></span></li>
+                                </ul>
+                            </div>
+
+                            <div class="card-section scroll-section">
+                                <h2>卷轴</h2>
+                                <p id="scrollType">无</p>
+                                <p id="scrollEffect"></p>
+                            </div>
+
+                            <div class="card-section abilities-section">
+                                <h2>职业能力</h2>
+                                <p id="charUnique"></p>
+                            </div>
+
+                            <div class="card-section background-section">
+                                <h2>背景</h2>
+                                <p id="charBg"></p>
+                            </div>
                         </div>
-                        <div class="class-container">
-                            <span class="class-label">职业</span>
-                            <span id="charClass" class="class-value"></span>
-                        </div>
-                    </div>
-
-                    <div class="card-section stats-section">
-                        <div class="stat-grid">
-                            <div class="stat-item">
-                                <div class="stat-label">灵巧</div>
-                                <div class="stat-value" id="agi">+0</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-label">表现</div>
-                                <div class="stat-value" id="prs">+0</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-label">强壮</div>
-                                <div class="stat-value" id="str">+0</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-label">体质</div>
-                                <div class="stat-value" id="tgh">+0</div>
-                            </div>
-                        </div>
-                        <div class="hp-omen-grid">
-                            <div class="hp-box">
-                                <div class="hp-label">HP</div>
-                                <div class="hp-value" id="charHp">0</div>
-                            </div>
-                            <div class="omen-box">
-                                <div class="omen-label">预兆</div>
-                                <div class="omen-value" id="charOmen">0</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card-section equipment-section">
-                        <h2>装备</h2>
-                        <div class="equipment-grid">
-                            <div class="equipment-item">
-                                <span class="equipment-label">武器:</span>
-                                <span id="charWeapon"></span>
-                            </div>
-                            <div class="equipment-item">
-                                <span class="equipment-label">护甲:</span>
-                                <span id="charArmor"></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card-section inventory-section">
-                        <h2>物品栏</h2>
-                        <p><strong>银币:</strong> <span id="basicSilver">0</span> s</p>
-                        <ul id="inventoryList">
-                            <li>水袋 (4天)</li>
-                            <li><span id="basicFood"></span> 天份口粮</li>
-                            <li><span id="charContainer"></span></li>
-                            <li><span id="charSupply1"></span></li>
-                            <li><span id="charSupply2"></span></li>
-                        </ul>
-                    </div>
-
-                    <div class="card-section scroll-section">
-                        <h2>卷轴</h2>
-                        <p id="scrollType">无</p>
-                        <p id="scrollEffect"></p>
-                    </div>
-
-                    <div class="card-section abilities-section">
-                        <h2>职业能力</h2>
-                        <p id="charUnique"></p>
-                    </div>
-
-                    <div class="card-section background-section">
-                        <h2>背景</h2>
-                        <p id="charBg"></p>
                     </div>
                 </div>
             </div>
-
-            <!-- PAGE 2: CREATION GUIDE -->
-            <div class="creation-guide">
+            
+            <!-- 车卡指南页面 -->
+            <div class="page" id="guidePage">
                 <div class="character-card">
-                    <h2>🎲 创建指南 | CREATION GUIDE</h2>
+                    <h2>🎲 车卡指南 | CREATION GUIDE</h2>
                     
                     <div class="card-section">
                         <h3>属性生成规则</h3>
@@ -150,6 +164,39 @@
                     <div class="card-section">
                         <h3>职业选择</h3>
                         <p>你可以选择一个职业，或者作为无职业者开始。职业会给予你独特的初始物品和能力。</p>
+                        
+                        <h4>1 尖牙逃兵</h4>
+                        <p>你有三十多个永远不会让你失望的朋友：你的牙齿。不忠、失常或者只是不受控制，任何没有放弃你的团体，你也离开了。但你这群牙齿——巨大、突出、结实、锐利的牙齿，永远是你的盟友。</p>
+                        <p>啃咬攻击：攻击DR10，d6伤害。你必须靠近目标。d6出1-2时敌人获得一次借机攻击。</p>
+                        <p>初始有2d6×10s和d2预兆。HP：体质+d10</p>
+                        <p>属性：强壮如牛，力量骰3d6+2；不灵光，敏捷骰3d6-1；普通的敏捷检定DR14而不是DR12，不包括防御。没文化；你无法理解卷轴。</p>
+                        <p>最初记忆，D6：1 Sarkash一处烧黑的建造。你的家？2 一艘腐朽的废船在灰色的海面上永不停息地起伏。3 Schleswig一家妓院。相当友好的环境。4 在旅店酒馆一角和狗睡在一起，等某人回来。5 在西国东部跟着一支军队。6 在卑尔根墓穴的荒野里吸狼的乳汁。</p>
+                        
+                        <h4>2 阴沟恶棍</h4>
+                        <p>你出生时一颗坏星对你微笑。贫穷、犯罪和糟糕的家长也没能帮到你。在你的社区，诚实工作一天永远不是选择。倒不是说你试过，你是谁，傻子吗？一把锋利的刀加上一个无光的夜晚，比得上一星期辛苦工作。</p>
+                        <p>初始有1d6×10s和d2预兆。HP：体质+d6</p>
+                        <p>属性：瘦小，力量骰3d6-2；鬼祟，所有的表现和敏捷检定DR减2（普通检定为DR10而不是DR12）。对照武器表骰d6，对照护甲表骰d2。</p>
+                        <p>坏出身，d6：1.还在襁褓时被扔进了移动粪车。2.母亲在Galgenbeck外的树上吊死了。3.被Grift的阴沟老鼠养大。4.寄居在Schleswig一个面包师的桌子底下，被拳打脚踢。5.逃离了Tveland的孤儿院。6.在Alliáns南部的小屋里受法外之徒教育。</p>
+                        
+                        <h4>3 神秘隐士</h4>
+                        <p>你的洞穴石头上面有星星。安静且完美。现在行将就木的世界带来了混乱，打扰了你的仪式，夜晚的胎膜甚至比你的洞穴更加黑暗。烦死了！</p>
+                        <p>初始有1d6×10s和d4预兆。HP：体质+d4</p>
+                        <p>属性：智者，表现骰3D6+2；虚弱，力量骰3D6-2。初始装备再加上一个随机卷轴（神圣或不洁）。对照武器表骰d6，对照护甲表骰d2。</p>
+                        
+                        <h4>4 落魄王室</h4>
+                        <p>只有已逝荣光的记忆对你行礼，你再也无法让任何人服从。拥有高贵血脉的你，不应如此！（不是说你指望这些奴工能理解你那深沉的忧伤。）</p>
+                        <p>初始有4d6×10s，和d2预兆。HP：体质+D6。</p>
+                        <p>属性：平凡得让人痛苦，没有任何属性调整。对照武器表骰d8，对照护甲表骰d4，但若获得任何重型护甲则重骰。你初始还拥有以下二项。</p>
+                        
+                        <h4>5 异端祭司</h4>
+                        <p>被唯一信仰双头巨蛇教会追捕，这名异教徒在废墟狂乱，在布满灰烬的道路上徘徊，夜晚在教堂进行亵渎仪式。</p>
+                        <p>初始有3D6×10s，D4预兆。HP：体质+D8</p>
+                        <p>属性：有洞察力，表现骰3d6+2；瘦弱，力量骰3d6-2。对照武器表骰d8，穿着中甲时可使用法术。</p>
+                        
+                        <h4>6 密教药师</h4>
+                        <p>蘑菇中诞生，林地中长大，银黑水池的月亮注视着你。</p>
+                        <p>初始有2d6×10s和d2预兆。HP：体质+d6</p>
+                        <p>属性：木头一般强韧，体质骰3d6+2；缺乏蛋白质，力量骰3d6-2。对照武器表骰d6，对照护甲表骰d2。你带着一个便携实验室，并且老是在寻找被快速消耗掉的成分。每天你有制造两种随机药剂的材料，一个可以熬制d4剂。</p>
                     </div>
 
                     <div class="card-section">
@@ -168,99 +215,255 @@
                         <p><strong>盾牌：</strong>减1HP伤害或牺牲盾牌格挡一次攻击。</p>
                     </div>
 
+                    <div class="card-section">
+                        <h3>可选规则</h3>
+                        <h4>预兆</h4>
+                        <p>显然他者法力的眼睛正注视着你，怪异监视者或是其它世界的扭曲命运。你尽可以叫它幸运。每个职业获得一定数量的预兆。如果你的游戏没有职业，每个角色初始有d2预兆。预兆耗尽时，骰职业指定的骰子（没有职业则是d2），并在至少六小时的休息后回复等同数量的预兆。</p>
+                        <p>使用预兆可以：</p>
+                        <ul>
+                            <li>一次攻击造成最大伤害</li>
+                            <li>或重投一次骰子（你的或其他人的）</li>
+                            <li>或降低d6点对你造成的伤害</li>
+                            <li>或取消一次重击或大失败</li>
+                            <li>或降低一次检定的DR4点</li>
+                        </ul>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <!-- MÖRK BORG介绍页面 -->
+            <div class="page" id="introductionPage">
+                <div class="character-card">
+                    <h2>🌑 MÖRK BORG 介绍 | INTRODUCTION</h2>
+                    
                     <div class="card-section global-rules">
                         <h3>通用核心规则</h3>
                         <p><span class="dr-rule">DR检定：</span>d20±属性修正 ≥ DR 为成功。</p>
                         <p><span class="warning">崩溃 (0 HP):</span> d4判定：1=昏迷, 2=断肢/残疾, 3=大出血, 4=死亡。</p>
                         <p><span class="danger">死亡:</span> 负HP时直接死亡。</p>
                     </div>
-                </div>
-            </div>
-        </div>
+                    
+                    <div class="card-section">
+                        <h3>垂死的世界</h3>
+                        <p>来自西边的灵魂，来自分裂的土地。遍地腐烂，血腥扑鼻。被诅咒的行者，你是否行向彼处？去往厄运不死者之谷？我们的幼童被孩童窃贼特戈尔带走，他的可怕罪行与血肉炼金无人不知晓。</p>
+                        <p>距离变化。地点间的道路扭曲。仿佛这个苍白、无光的世界拥有了意志和可悲的生命。它的仁慈在太长的岁月后凝固成了愤怒。</p>
+                        <p>你是谁？是盗墓贼，破碎的指甲间夹着闪烁的银币？是秘术师，要让世界那悲惨的心离开无法逃避的终结？更有可能的是，二者没有区别。很多年来，没有人再见过太阳。老者更关心牺牲与献祭，而不是他们正在扭打的后代。末日预言家一次又一次证明了自己，他们被隐藏的势力拥入怀中。或许投降是最好的选择——难道要相信你自己的直觉和技巧，而不是骰子的一时兴致？在一切溺死在可亲的沉默之前。生命被锁在黑暗堡垒中，一次又一次地失败。</p>
+                        <p>Anuk Schleger，Creton教团的僧侣，在565年遇见了巨蛇Verhu，并记下了这头生物低语出的预言。这些遗落的文本被后人称作《无名经文》。300年后，建造新的大教堂时发现了Schleger的墓，其中正是《无名经文》。之后经文内描述的事件尽数发生。预言是绝对的，是真理，是事实，它取代了所有其它经文。围绕这座教堂诞生了Galgenbeck，至今最伟大的城市。</p>
+                        <p>巨蛇有二，每头又有二头。四头争执几百年。Verhu预言无法改变的毁灭，因为他永远正确，他变得极其自满。他也是最受崇拜的头。如果你学会了末日的法典，或许只要献上正确的供品便可扭转末日？Verhu爱极了他的地位，他渴求以他的名义建造的庙宇。</p>
+                        <p>世界之初，只有水、尘埃和肥大的苍蝇组成的云团，最初的巨蛇，SHE出现。卑尔根墓穴裂隙中爬出SHE。SHE有否定的头，Lusi，看上和看下。但一切都应安好。她的同胞Ark，欺瞒的头，自称是第一个预言者，如今被Verhu取代。很少人见过她，最年长的头，但许多人行走她同胞的路。</p>
+                        <p>自时间出现，SHE诞下许多子嗣。他们的诞生并非没有痛苦。全部被扔下卑尔根墓穴的悬崖，只有HE存活。在厄运不死者山谷之底，他的眼睛盯住山尖，HE朝邪恶的母亲吐出诅咒。名为Gorgh的头是不满的，与妒忌同行，只有他的同胞Verhu知道被诅咒的真相。一次又一次，他的预言成为现实。他的信徒献上的金色礼物堆得如此之高，摇摇欲坠，向下滑落。</p>
+                    </div>
+                    
+                    <div class="card-section">
+                        <h3>地理</h3>
+                        <p><strong>Tveland</strong> 上的 Galgenbeck 是有史以来最伟大的城市。Galgenbeck 没有国王或女王，而是由大祭司 Josilfa Migol 统治。双头巨蛇大教堂地底深处是冰凉漆黑的密室，细碎的灯火交错，这里是她的王座。Josilfa，年长却又年轻，相传她与神 Nechrubel 勾结，获得了永恒的生命。</p>
+                        <p><strong>Nechrubel</strong>：覆盖一切的阴影。Nechrubel 是忧愁，是作物减产，是冲突和战争。据说他在 Verhu 耳边低语末日的预言。</p>
+                        <p><strong>Sarkash</strong> 这座森林最近似乎以非自然的速度扩张。道路纠结，被疯长的黑暗歪曲，将游荡者引入歧途。Sarkash 深处，在行人最不会预料到的地方，在一圈死去的树木中央，是 Graven-Tosk。一处极其古老的墓地，满是陵墓、两眼空白的小天使、沉寂的喷泉、瘟疫尸坑和普通坟墓。笼罩Graven-Tosk的是阴影王的宫殿，一座哥特式的黑色城堡，如同Galgenbeck双头巨蛇大教堂的镜像。宫殿大部分都成了倒塌的废墟，不幸的灵魂在破碎的厅堂下寻找庇护。</p>
+                        <p><strong>Grift</strong> 多年以前，Grift 诞生在东部与无尽之海相接的半岛上。无底的 Múr 切断了这座繁荣的城邦与世界的连接，只有三座桥能抵达，这三座桥如此庞大，据说只有被奴役的巨人才可能建造。Grift 曾是和谐与理性之光的国度，是这个瘟疫与战争肆虐的世界里的庇护所。但世界转向，哪怕 Múr 也无法让 Grift 逃离无法逃离的陨落。仁慈王Sigfúm在街道上被嘲弄，Grift大部分区域都陷入绝望，邪恶的生物从干涸龟裂的大地爬入。每晚三座大桥都在尖叫咆哮，如同挤压岩石的巨船。</p>
+                        <p><strong>Kergüs</strong> 孤立席卷 Kergüs，如同无木荒原的风。为逃离血腥女伯爵 Anthelia，无视法律者与被遗弃者长途跋涉穿过了满是冰隙的冰原，要么栖身平原，要么躲藏在大地的裂缝中。北方，风诞生之地，是 Alliáns，被风暴刺穿的高塔城市，由黑色玻璃建造。其中有一座城堡，如同白色石头构成的瀑布：这是 Anthelia 的王座。她与城堡的墙一般苍白，与融冰一般年轻。有人说她永远年轻。海鸥高声呼喊那些欲与她执手的骑士之名，提醒人们这些追求者与Anthelia的年龄特征同时消失。</p>
+                        <p><strong>西部王国</strong>，在头脑简单的穷人的歌谣中被称作西国，当 Onda 湖供给渔获、河流贸易繁荣时，这里曾是和平与富饶的家园。现在，恐怖与专制如影随形。在悲哀但艳俗的城市 Schleswig 的秘密要塞里，国王 Fathmu 四世暗中谋划。多疑、肥胖，越发疯狂，他陷入了精神错乱与无形的恐惧之中。国王沉迷于Verhu的预言，对民居与村庄、谷仓与寺庙大肆掠夺。没有什么地方、什么人时安全的，尤其是穷人。他们因税收饿死，他们的食物和仓库被Fathmu的手下带走。</p>
+                        <p><strong>厄运不死者山谷</strong> 传说巨蛇 HE 盘踞于山谷的墓穴中，偶有幸存者目睹。谎言与传奇包裹山谷，遮挡了一切真相。小贩的故事说土地、空气都是剧毒——会带来无眠、不得安宁的死亡。旅人的命运并不明晰，但缓慢生长、无穷无尽的绝望注入有毒的回忆和晦暗的思绪，直到生命的火花变异成可悲而绝望的不死。失去希望的人行至此处，以求终结痛苦，获得超越这个黑暗且破败世界的金色死后生命。</p>
+                    </div>
+                    
 
-        <!-- 物品价值速查手册 -->
-        <div class="price-guide">
-            <div class="guide-header" id="guideToggle">
-                <h2>💰 物品价值速查手册 | 所有道具银币价格 (完整收录)</h2>
-                <span style="color:#d4af37; font-size:1.5rem;">▼</span>
+                </div>
             </div>
-            <div class="guide-content" id="guideContent">
-                <div class="guide-category">
-                    <h3>🗡️ 武器类 (含弹药)</h3>
-                    <div class="guide-list">
-                        <div class="guide-item">徒手 - 无价值 (d2伤害)</div>
-                        <div class="guide-item">大腿骨 - 不值钱 (d4伤害)</div>
-                        <div class="guide-item">长棍 - 5s (d4伤害)</div>
-                        <div class="guide-item">短剑 - 20s (d4伤害)</div>
-                        <div class="guide-item">短刀 - 10s (d4伤害)</div>
-                        <div class="guide-item">投石索 - 8s (d4伤害)</div>
-                        <div class="guide-item">短弓 -13s (d4伤害)</div>
-                        <div class="guide-item">手斧 -15s (d6伤害)</div>
-                        <div class="guide-item">棍棒 -10s (d6伤害)</div>
-                        <div class="guide-item">战锤 -30s (d6伤害)</div>
-                        <div class="guide-item">剑 -30s (d6伤害)</div>
-                        <div class="guide-item">弓 -25s (d6伤害)</div>
-                        <div class="guide-item">流星锤 -35s (d8伤害)</div>
-                        <div class="guide-item">弩 -40s (d8伤害)</div>
-                        <div class="guide-item">战斧 -35s (d8伤害)</div>
-                        <div class="guide-item">双手剑 -60s (d10伤害)</div>
-                        <div class="guide-item">鞭 -5s (d2伤害 束缚)</div>
-                        <div class="guide-item">20支箭 -10s | 10支弩矢 -10s</div>
+
+            <!-- 装备道具页面 -->
+            <div class="page" id="equipmentPage">
+                <div class="character-card">
+                    <h2>💰 装备道具 | EQUIPMENT</h2>
+                    
+                    <div class="card-section">
+                        <h3>🗡️ 武器类 (含弹药)</h3>
+                        <div class="equipment-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>名称</th>
+                                        <th>价格</th>
+                                        <th>伤害</th>
+                                        <th>备注</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>徒手</td><td>无价值</td><td>d2</td><td></td></tr>
+                                    <tr><td>大腿骨</td><td>不值钱</td><td>d4</td><td></td></tr>
+                                    <tr><td>长棍</td><td>5s</td><td>d4</td><td></td></tr>
+                                    <tr><td>短剑</td><td>20s</td><td>d4</td><td></td></tr>
+                                    <tr><td>短刀</td><td>10s</td><td>d4</td><td></td></tr>
+                                    <tr><td>投石索</td><td>8s</td><td>d4</td><td></td></tr>
+                                    <tr><td>短弓</td><td>13s</td><td>d4</td><td>需要箭矢</td></tr>
+                                    <tr><td>手斧</td><td>15s</td><td>d6</td><td></td></tr>
+                                    <tr><td>棍棒</td><td>10s</td><td>d6</td><td></td></tr>
+                                    <tr><td>战锤</td><td>30s</td><td>d6</td><td></td></tr>
+                                    <tr><td>剑</td><td>30s</td><td>d6</td><td></td></tr>
+                                    <tr><td>弓</td><td>25s</td><td>d6</td><td>需要箭矢</td></tr>
+                                    <tr><td>流星锤</td><td>35s</td><td>d8</td><td></td></tr>
+                                    <tr><td>弩</td><td>40s</td><td>d8</td><td>需要弩矢</td></tr>
+                                    <tr><td>战斧</td><td>35s</td><td>d8</td><td></td></tr>
+                                    <tr><td>双手剑</td><td>60s</td><td>d10</td><td>双手武器</td></tr>
+                                    <tr><td>鞭</td><td>5s</td><td>d2</td><td>束缚</td></tr>
+                                    <tr><td>20支箭</td><td>10s</td><td>-</td><td>弓用弹药</td></tr>
+                                    <tr><td>10支弩矢</td><td>10s</td><td>-</td><td>弩用弹药</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="card-section">
+                        <h3>🛡️ 护甲/防护类</h3>
+                        <div class="equipment-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>名称</th>
+                                        <th>价格</th>
+                                        <th>等级</th>
+                                        <th>效果</th>
+                                        <th>备注</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>无护甲</td><td>0s</td><td>0</td><td>-</td><td></td></tr>
+                                    <tr><td>轻甲(毛皮/棉甲/皮甲)</td><td>20s</td><td>1</td><td>-d2伤害</td><td></td></tr>
+                                    <tr><td>中甲(鳞甲/链甲)</td><td>100s</td><td>2</td><td>-d4伤害</td><td></td></tr>
+                                    <tr><td>重甲(条板甲/板甲)</td><td>200s</td><td>3</td><td>-d6伤害</td><td>敏捷检定DR+4，防御检定DR+2</td></tr>
+                                    <tr><td>盾</td><td>20s</td><td>-</td><td>-1HP伤害</td><td>或牺牲盾牌无视一次攻击</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="card-section">
+                        <h3>🎒 装备/补给类</h3>
+                        <div class="equipment-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>名称</th>
+                                        <th>价格</th>
+                                        <th>备注</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>背包</td><td>6s</td><td>可装下7件普通大小物品</td></tr>
+                                    <tr><td>包</td><td>3s</td><td>可装下10件普通大小物品</td></tr>
+                                    <tr><td>小车</td><td>25s</td><td></td></tr>
+                                    <tr><td>驴</td><td>无标价</td><td></td></tr>
+                                    <tr><td>水带</td><td>4s</td><td>4天水</td></tr>
+                                    <tr><td>干食物</td><td>1s/天</td><td></td></tr>
+                                    <tr><td>猪油</td><td>5s</td><td>5顿饭</td></tr>
+                                    <tr><td>30尺绳子</td><td>4s</td><td></td></tr>
+                                    <tr><td>15尺铁链</td><td>10s</td><td></td></tr>
+                                    <tr><td>火把</td><td>2s/根</td><td></td></tr>
+                                    <tr><td>灯油</td><td>5s</td><td>6小时</td></tr>
+                                    <tr><td>提灯</td><td>10s</td><td></td></tr>
+                                    <tr><td>镁条/镁合金取火棒</td><td>4s</td><td></td></tr>
+                                    <tr><td>医药箱</td><td>15s</td><td>4次使用，+d6HP</td></tr>
+                                    <tr><td>撬锁工具+金属片</td><td>15s</td><td></td></tr>
+                                    <tr><td>撬棍</td><td>8s</td><td>d4伤害</td></tr>
+                                    <tr><td>捕熊夹</td><td>20s</td><td>d8伤害，DR14发现</td></tr>
+                                    <tr><td>炸弹</td><td>无标价</td><td>d10伤害</td></tr>
+                                    <tr><td>钩爪</td><td>12s</td><td></td></tr>
+                                    <tr><td>梯子</td><td>7s</td><td></td></tr>
+                                    <tr><td>大铁钩</td><td>9s</td><td></td></tr>
+                                    <tr><td>锐利的针</td><td>3s</td><td></td></tr>
+                                    <tr><td>银色十字架</td><td>60s</td><td></td></tr>
+                                    <tr><td>木质十字架</td><td>8s</td><td></td></tr>
+                                    <tr><td>红色毒药</td><td>20s</td><td>3剂，DR12</td></tr>
+                                    <tr><td>黑色毒药</td><td>20s</td><td>3剂，DR14</td></tr>
+                                    <tr><td>精致香水</td><td>25s</td><td>价值25s</td></tr>
+                                    <tr><td>白垩</td><td>1s</td><td></td></tr>
+                                    <tr><td>口嚼烟叶</td><td>1s</td><td></td></tr>
+                                    <tr><td>毯子</td><td>4s</td><td></td></tr>
+                                    <tr><td>地毯</td><td>3s</td><td></td></tr>
+                                    <tr><td>帐篷</td><td>12s</td><td></td></tr>
+                                    <tr><td>工具箱</td><td>20s</td><td>10枚钉子、钳子、锤子、小锯子和钻头</td></tr>
+                                    <tr><td>铁钉</td><td>5s</td><td>10枚</td></tr>
+                                    <tr><td>蒺藜</td><td>7s</td><td>d4伤害+感染</td></tr>
+                                    <tr><td>手铐</td><td>10s</td><td></td></tr>
+                                    <tr><td>笼嘴</td><td>6s</td><td></td></tr>
+                                    <tr><td>套索</td><td>5s</td><td></td></tr>
+                                    <tr><td>镜子</td><td>15s</td><td></td></tr>
+                                    <tr><td>剪刀</td><td>9s</td><td></td></tr>
+                                    <tr><td>剁肉刀</td><td>15s</td><td></td></tr>
+                                    <tr><td>防腐尸体</td><td>66+d6 s</td><td></td></tr>
+                                    <tr><td>盐</td><td>4s</td><td></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="card-section">
+                        <h3>🐾 野兽/生物类</h3>
+                        <div class="equipment-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>名称</th>
+                                        <th>价格</th>
+                                        <th>备注</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>狗（家养）</td><td>25s</td><td>d6+2HP，啃咬d4</td></tr>
+                                    <tr><td>狗（野生）</td><td>10s</td><td></td></tr>
+                                    <tr><td>马</td><td>80s</td><td></td></tr>
+                                    <tr><td>骡</td><td>10s</td><td></td></tr>
+                                    <tr><td>老鼠（驯化）</td><td>8s</td><td></td></tr>
+                                    <tr><td>猴子</td><td>无标价</td><td>d4+2HP，挥击/啃咬d4</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="card-section">
+                        <h3>💴 服务/修复类</h3>
+                        <div class="equipment-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>名称</th>
+                                        <th>价格</th>
+                                        <th>备注</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>收容所一晚</td><td>3s</td><td></td></tr>
+                                    <tr><td>饮品</td><td>1s</td><td></td></tr>
+                                    <tr><td>稳定餐食</td><td>2s</td><td></td></tr>
+                                    <tr><td>贿赂守卫</td><td>20-40s</td><td></td></tr>
+                                    <tr><td>贿赂文员</td><td>30-60s</td><td></td></tr>
+                                    <tr><td>贿赂平民</td><td>5-15s</td><td></td></tr>
+                                    <tr><td>护甲修复(1→2)</td><td>25s</td><td>不可超原等级</td></tr>
+                                    <tr><td>护甲修复(2→3)</td><td>40s</td><td>不可超原等级</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-                <div class="guide-category">
-                    <h3>🛡️ 护甲/防护类</h3>
-                    <div class="guide-list">
-                        <div class="guide-item">无护甲 - 0s (等级0)</div>
-                        <div class="guide-item">轻甲(毛皮/棉甲/皮甲) -20s (等级1，-d2伤害)</div>
-                        <div class="guide-item">中甲(鳞甲/链甲) -100s (等级2，-d4伤害)</div>
-                        <div class="guide-item">重甲(条板甲/板甲) -200s (等级3，-d6伤害)</div>
-                        <div class="guide-item">盾 -20s (-1HP伤害 / 牺牲无视一次攻击)</div>
+            </div>
+
+            <!-- 骰子工具页面 -->
+            <div class="page" id="dicePage">
+                <div class="character-card">
+                    <h2>🎲 骰子模拟器 | DICE ROLLER</h2>
+                    <div class="dice-buttons">
+                        <button class="dice-btn" onclick="window.rollDice('d2')">D2</button>
+                        <button class="dice-btn" onclick="window.rollDice('d4')">D4</button>
+                        <button class="dice-btn" onclick="window.rollDice('d6')">D6</button>
+                        <button class="dice-btn" onclick="window.rollDice('d8')">D8</button>
+                        <button class="dice-btn" onclick="window.rollDice('d10')">D10</button>
+                        <button class="dice-btn" onclick="window.rollDice('d12')">D12</button>
+                        <button class="dice-btn" onclick="window.rollDice('d20')">D20</button>
+                        <button class="dice-btn" onclick="window.rollDice('3d6')">3D6</button>
+                        <button class="dice-btn" onclick="window.rollDice('2d6')">2D6</button>
                     </div>
-                </div>
-                <div class="guide-category">
-                    <h3>🎒 装备/补给类 (全收录)</h3>
-                    <div class="guide-list">
-                        <div class="guide-item">背包 -6s (7件物品)</div>
-                        <div class="guide-item">包 -3s (10件物品)</div>
-                        <div class="guide-item">小车 -25s | 驴 - 无标价</div>
-                        <div class="guide-item">水带 -4s (4天水)</div>
-                        <div class="guide-item">干食物 -1s/天</div>
-                        <div class="guide-item">猪油 -5s (5顿饭)</div>
-                        <div class="guide-item">30尺绳子 -4s | 15尺铁链 -10s</div>
-                        <div class="guide-item">火把 -2s/根 | 灯油 -5s (6小时)</div>
-                        <div class="guide-item">提灯 -10s | 镁条/镁合金取火棒 -4s</div>
-                        <div class="guide-item">医药箱 -15s (4次使用，+d6HP)</div>
-                        <div class="guide-item">撬锁工具+金属片 -15s | 撬棍 -8s</div>
-                        <div class="guide-item">捕熊夹 -20s (d8伤害，DR14发现)</div>
-                        <div class="guide-item">炸弹 -无标价 (d10伤害)</div>
-                        <div class="guide-item">钩爪 -12s | 梯子 -7s | 大铁钩 -9s</div>
-                        <div class="guide-item">医药箱 -15s | 锐利的针 -3s</div>
-                        <div class="guide-item">银色十字架 -60s | 木质十字架 -8s</div>
-                        <div class="guide-item">红色毒药 -20s (3剂，DR12) | 黑色毒药 -20s (3剂，DR14)</div>
-                        <div class="guide-item">精致香水 -25s | 白垩 -1s | 口嚼烟叶 -1s</div>
-                        <div class="guide-item">毯子 -4s | 地毯 -3s | 帐篷 -12s</div>
-                        <div class="guide-item">工具箱 -20s (钉子/锤子/锯子/钳子)</div>
-                        <div class="guide-item">铁钉 -5s(10枚) | 蒺藜 -7s(d4伤害+感染)</div>
-                        <div class="guide-item">手铐 -10s | 笼嘴 -6s | 套索 -5s</div>
-                        <div class="guide-item">镜子 -15s | 剪刀 -9s | 剁肉刀 -15s</div>
-                        <div class="guide-item">防腐尸体 -66+d6 s | 盐 -4s</div>
-                    </div>
-                </div>
-                <div class="guide-category">
-                    <h3>🐾 野兽/生物类</h3>
-                    <div class="guide-list">
-                        <div class="guide-item">家养狗 -25s | 野生狗 -10s</div>
-                        <div class="guide-item">马 -80s | 骡 -10s</div>
-                        <div class="guide-item">驯化老鼠 -8s | 猴子 -无标价</div>
-                    </div>
-                </div>
-                <div class="guide-category">
-                    <h3>💴 服务/修复类</h3>
-                    <div class="guide-list">
-                        <div class="guide-item">收容所一晚 -3s | 饮品 -1s | 稳定餐食 -2s</div>
-                        <div class="guide-item">贿赂守卫 -20-40s | 贿赂文员 -30-60s | 贿赂平民 -5-15s</div>
-                        <div class="guide-item">护甲修复(1→2) -25s | 护甲修复(2→3) -40s (不可超原等级)</div>
+                    <div class="dice-result">
+                        <span id="diceResult">点击按钮掷骰子</span>
                     </div>
                 </div>
             </div>

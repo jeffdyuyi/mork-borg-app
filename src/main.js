@@ -39,8 +39,24 @@ function setupEventListeners() {
   navBtns.forEach(btn => {
     btn.addEventListener('click', function() {
       const page = this.getAttribute('data-page');
-      showPage(page);
+      if (this.id === 'showAuthorInfo') {
+        showAuthorInfoModal();
+      } else {
+        showPage(page);
+      }
     });
+  });
+  
+  // 作者信息弹窗事件监听
+  document.getElementById('showAuthorInfo').addEventListener('click', showAuthorInfoModal);
+  document.querySelector('.close').addEventListener('click', hideAuthorInfoModal);
+  
+  // 点击弹窗外部关闭弹窗
+  window.addEventListener('click', function(event) {
+    const modal = document.getElementById('authorInfoModal');
+    if (event.target === modal) {
+      hideAuthorInfoModal();
+    }
   });
   
   // 将骰子函数暴露到全局
@@ -64,7 +80,10 @@ function showPage(pageId) {
   // 更新导航按钮状态
   const navBtns = document.querySelectorAll('.nav-btn');
   navBtns.forEach(btn => {
-    if (btn.getAttribute('data-page') === pageId) {
+    if (btn.id === 'showAuthorInfo') {
+      // 作者信息按钮不参与active状态管理
+      btn.classList.remove('active');
+    } else if (btn.getAttribute('data-page') === pageId) {
       btn.classList.add('active');
     } else {
       btn.classList.remove('active');
@@ -344,6 +363,18 @@ function checkForSharedCharacter() {
       console.error('解析分享角色失败:', error);
     }
   }
+}
+
+// 显示作者信息弹窗
+function showAuthorInfoModal() {
+  const modal = document.getElementById('authorInfoModal');
+  modal.style.display = 'block';
+}
+
+// 隐藏作者信息弹窗
+function hideAuthorInfoModal() {
+  const modal = document.getElementById('authorInfoModal');
+  modal.style.display = 'none';
 }
 
 // 页面加载完成后初始化

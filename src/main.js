@@ -14,15 +14,13 @@ function initApp() {
   loadSavedCharacters();
   checkForSharedCharacter();
   initNavigation();
+  handleResetCharacter();
 }
 
 // 初始化导航
 function initNavigation() {
   // 显示默认页面
   showPage('character');
-  
-  // 隐藏角色操作按钮组
-  document.getElementById('characterActions').style.display = 'flex';
 }
 
 // 设置事件监听
@@ -46,9 +44,6 @@ function setupEventListeners() {
       }
     });
   });
-  
-  // 作者信息弹窗事件监听
-  document.getElementById('showAuthorInfo').addEventListener('click', showAuthorInfoModal);
   document.querySelector('.close').addEventListener('click', hideAuthorInfoModal);
   
   // 点击弹窗外部关闭弹窗
